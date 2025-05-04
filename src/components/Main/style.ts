@@ -206,6 +206,12 @@ export const Editar = styled.div`
         font-weight: 500;
         font-size: 22px;
       }
+
+      &: disabled {
+        background-color: ${GRAY_400};
+        font-size: 20px;
+        color: ${GRAY_600};
+      }
     }
 
     .botao-cancelar {

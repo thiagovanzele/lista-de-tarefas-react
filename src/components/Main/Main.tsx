@@ -126,6 +126,7 @@ const Main = () => {
             <div className="botoes-editar">
               <Button
                 className="botao-salvar"
+                disabled={!tarefaEditada.value}
                 onClick={() => handleSalvarEdicao(tarefaEditada.id)}
               >
                 <FaSave className="botao-salvar-icone" />
