@@ -75,11 +75,11 @@ const Main = () => {
         <div className="input-content">
           <Input
             type="text"
-            placeholder={"Digite sua tarefa"}
+            placeholder={"Digite sua tarefa..."}
             value={novaTarefa}
             onChange={(e) => setNovaTarefa(e.target.value)}
           ></Input>
-          <Button type="submit">
+          <Button disabled={!novaTarefa} type="submit">
             <FaPlus className="botao-adicionar" />
           </Button>
         </div>

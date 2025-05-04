@@ -5,6 +5,7 @@ import {
   GRAY_100,
   GRAY_300,
   GRAY_400,
+  GRAY_600,
   GRAY_900,
   GREEN_400,
   GREEN_500,
@@ -85,6 +86,15 @@ export const Button = styled.button`
 
   &: hover {
     background-color: ${VERDE_900};
+  }
+
+  &: disabled {
+    background-color: ${GRAY_400};
+    cursor: not-allowed;
+
+    .botao-adicionar {
+      color: ${GRAY_600};
+    }
   }
 `;
 
