@@ -13,10 +13,11 @@ import {
 import { FaPlus } from "react-icons/fa6";
 import { FiEdit, FiTrash, FiX } from "react-icons/fi";
 import { FaSave } from "react-icons/fa";
+import axios from "axios";
 
 export interface TarefaProp {
-  id: number;
-  value: string;
+  tarefaId: number;
+  descricao: string;
 }
 
 const Main = () => {
@@ -27,46 +28,72 @@ const Main = () => {
     {} as TarefaProp
   );
 
-  const adicionarTarefa = (value: string): void => {
-    setListaDeTarefas((antigo) => [
-      ...antigo,
-      { id: antigo.length + 1, value },
-    ]);
+  const adicionarTarefa = async (value: string): Promise<void> => {
+    try {
+      const response = await axios.post("http://localhost:8080/tarefas", {
+        descricao: value,
+      });
+      if (response.status === 201) {
+        setListaDeTarefas((prev) => [
+          ...prev,
+          { tarefaId: response.data.tarefaId, descricao: value },
+        ]);
+      }
+    } catch (error) {
+      console.log("Erro ao adicionar tarefa: ", error);
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (novaTarefa.trim()) {
-      adicionarTarefa(novaTarefa);
+      await adicionarTarefa(novaTarefa);
       setNovaTarefa("");
     }
   };
 
-  const handleExcluirTarefa = (id: number): void => {
-    setListaDeTarefas((tarefasAnteriores) =>
-      tarefasAnteriores.filter((tarefa) => tarefa.id !== id)
-    );
+  const loadData = async (): Promise<void> => {
+    try {
+      const response = await axios.get("http://localhost:8080/tarefas", {});
+      if (response.status === 200) {
+        setListaDeTarefas(response.data);
+      }
+    } catch (error) {
+      console.log("Erro ao buscar dados: ", error);
+    }
   };
 
-  const handleEditarTarefa = (id: number): void => {
-    const tarefaParaEditar = listaDeTarefas.find((tar) => tar.id === id);
+  const handleExcluirTarefa = async (id: number): Promise<void> => {
+    await axios.delete(`http://localhost:8080/tarefas/${id}`, {});
+    loadData();
+  };
 
-    if (tarefaParaEditar) {
-      setTarefaEditada({ id: id, value: tarefaParaEditar.value });
+  const handleEditarTarefa = async (id: number): Promise<void> => {
+    const response = await axios.get(`http://localhost:8080/tarefas/${id}`, {});
+
+    if (response.status === 200) {
+      setTarefaEditada({
+        tarefaId: response.data.tarefaId,
+        descricao: response.data.descricao,
+      });
       setShowModal(true);
     }
   };
 
-  const handleSalvarEdicao = (id: number): void => {
-    if (tarefaEditada.value.trim()) {
-      setListaDeTarefas((prev) =>
-        prev.map((tarefa) =>
-          tarefa.id === id ? { ...tarefa, value: tarefaEditada.value } : tarefa
-        )
-      );
+  const handleSalvarEdicao = async (id: number): Promise<void> => {
+    if (tarefaEditada.descricao.trim()) {
+      await axios.put(`http://localhost:8080/tarefas/${id}`, {
+        descricao: tarefaEditada.descricao,
+      });
+
       setShowModal(false);
+      loadData();
     }
   };
+
+  useEffect(() => {
+    loadData();
+  }, []);
 
   return (
     <Container>
@@ -89,16 +116,16 @@ const Main = () => {
         <Content>
           <h2>Lista de tarefas</h2>
           {listaDeTarefas.map((tarefa) => (
-            <Tarefa key={tarefa.id}>
-              <div className="tarefa-value">{tarefa.value}</div>
+            <Tarefa key={tarefa.tarefaId}>
+              <div className="tarefa-value">{tarefa.descricao}</div>
               <Botoes>
                 <FiEdit
                   className="botao-editar"
-                  onClick={() => handleEditarTarefa(tarefa.id)}
+                  onClick={() => handleEditarTarefa(tarefa.tarefaId)}
                 />
                 <FiTrash
                   className="botao-excluir"
-                  onClick={() => handleExcluirTarefa(tarefa.id)}
+                  onClick={() => handleExcluirTarefa(tarefa.tarefaId)}
                 />
               </Botoes>
             </Tarefa>
@@ -113,12 +140,12 @@ const Main = () => {
             <h2>Editar tarefa</h2>
             <Input
               type="text"
-              value={tarefaEditada.value}
+              value={tarefaEditada.descricao}
               placeholder={"Digite sua tarefa"}
               onChange={(e) =>
                 setTarefaEditada({
-                  id: tarefaEditada.id,
-                  value: e.target.value,
+                  tarefaId: tarefaEditada.tarefaId,
+                  descricao: e.target.value,
                 })
               }
             ></Input>
@@ -126,8 +153,8 @@ const Main = () => {
             <div className="botoes-editar">
               <Button
                 className="botao-salvar"
-                disabled={!tarefaEditada.value}
-                onClick={() => handleSalvarEdicao(tarefaEditada.id)}
+                disabled={!tarefaEditada.descricao}
+                onClick={() => handleSalvarEdicao(tarefaEditada.tarefaId)}
               >
                 <FaSave className="botao-salvar-icone" />
               </Button>
