@@ -1,14 +1,12 @@
 import {
   AMARELO,
-  AZUL_BEBE,
-  AZUL_ESVERDEADO,
+  BLACK_1000,
   GRAY_100,
   GRAY_300,
   GRAY_400,
   GRAY_600,
-  GRAY_900,
-  GREEN_400,
-  GREEN_500,
+  GRAY_800,
+  GRAY_950,
   VERDE_200,
   VERDE_900,
   VERMELHO_200,
@@ -21,26 +19,27 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background-color: ${AZUL_ESVERDEADO};
+  background-color: ${GRAY_950};
   padding: 20px;
+  overflow-y: auto;
 
   h2 {
     margin: 0;
     padding: 0;
-    margin-left: 15px;
+    color: ${GRAY_100};
+    text-align: center;
   }
 `;
 
 export const Formulario = styled.form`
-  background-color: ${AMARELO};
+  background-color: ${GRAY_600};
   width: 500px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin: 60px auto;
+  margin: 10px auto;
   border-radius: 8px;
-  height: 120px;
   padding: 20px;
 
   .input-content {
@@ -61,7 +60,7 @@ export const Input = styled.input`
   outline: none;
 
   &:focus {
-    border-color: #4caf50;
+    border-color: ${BLACK_1000};
   }
 `;
 
@@ -99,16 +98,22 @@ export const Button = styled.button`
 `;
 
 export const Content = styled.div`
-  background-color: ${AMARELO};
+  background-color: ${GRAY_600};
   width: 500px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
-  margin: 60px auto;
+  margin: 0px auto;
   border-radius: 8px;
   height: auto;
   padding: 20px;
   gap: 15px;
+
+  .paginacao-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 export const Tarefa = styled.div`
@@ -122,15 +127,52 @@ export const Tarefa = styled.div`
     padding: 8px 20px;
     border-radius: 20px;
     width: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 1.5rem;
+
+    .botao-excluir {
+      cursor: pointer;
+      color: red;
+      transition: color 0.3s ease;
+    }
+
+    .botao-excluir:hover {
+      color: darkred;
+    }
+
+    .botao-editar {
+      cursor: pointer;
+      color: yellow;
+      transition: color 0.3s ease;
+    }
+
+    .botao-editar:hover {
+      color: gold;
+    }
   }
 
   &:nth-child(odd) .tarefa-value {
-    background-color: ${AZUL_BEBE};
+    background-color: ${GRAY_400};
   }
 
   &:nth-child(even) .tarefa-value {
-    background-color: ${AZUL_ESVERDEADO};
+    background-color: ${GRAY_800};
+    color: ${GRAY_100};
   }
+`;
+
+export const Separador = styled.div`
+  border-left: 1px solid ${WHITE};
+  height: 100%;
+  margin: 0 4px;
+`;
+
+export const SeparadorHorizontal = styled.div`
+  border-bottom: 1px solid ${GRAY_300};
+  height: 100%;
+  width: 100%;
 `;
 
 export const Botoes = styled.div`
@@ -142,26 +184,6 @@ export const Botoes = styled.div`
   background-color: ${GRAY_300};
   white-space: nowrap;
   gap: 10px;
-
-  .botao-excluir {
-    cursor: pointer;
-    color: red;
-    transition: color 0.3s ease;
-  }
-
-  .botao-excluir:hover {
-    color: darkred;
-  }
-
-  .botao-editar {
-    cursor: pointer;
-    color: yellow;
-    transition: color 0.3s ease;
-  }
-
-  .botao-editar:hover {
-    color: gold;
-  }
 `;
 
 export const Overlay = styled.div`
